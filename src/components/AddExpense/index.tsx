@@ -72,7 +72,14 @@ export const AddExpense: React.FC<Props> = ({ refetch }) => {
       >
         +
       </div>
-      <Modal isOpen={isModalOpen} style={customStyles}>
+      <Modal
+        isOpen={isModalOpen}
+        style={customStyles}
+        shouldCloseOnOverlayClick={true}
+        onRequestClose={() => {
+          toggleModal(false);
+        }}
+      >
         <div>
           <div style={{ textAlign: 'center', marginBottom: '15px' }}>
             Add Transaction
