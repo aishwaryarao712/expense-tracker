@@ -11,6 +11,7 @@ const Dashboard = () => {
     data: expenseData,
     loading: fetchingExpenses,
     error: userError,
+    refetch,
   } = useQuery(FETCH_EXPENSES);
 
   if (fetchingExpenses) {
@@ -25,7 +26,7 @@ const Dashboard = () => {
     <div className="Dashboard">
       <Summary expenses={expenseData.expenses} />
       <Expenses expenses={expenseData.expenses} />
-      <AddExpense />
+      <AddExpense refetch={refetch} />
     </div>
   );
 };

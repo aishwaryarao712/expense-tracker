@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import Modal from 'react-modal';
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import NumericInput from 'react-numeric-input';
+import { useMutation } from '@apollo/client';
+
+import { ADD_EXPENSE } from '../../graphql/mutations';
+
+type Props = {
+  refetch: VoidFunction;
+};
 
 const customStyles = {
   content: {
@@ -15,18 +22,33 @@ const customStyles = {
 };
 
 const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
+  { value: 'debit', label: 'Debit' },
+  { value: 'credit', label: 'Credit' },
 ];
 const defaultOption = options[0];
 
-export const AddExpense = () => {
+export const AddExpense: React.FC<Props> = ({ refetch }) => {
   const [isModalOpen, toggleModal] = useState(false);
+  const [transactionType, setType] = useState<
+    SingleValue<{
+      value: string;
+      label: string;
+    }>
+  >(defaultOption);
+  const [amount, setAmount] = useState<number | null>(null);
+  const [description, setDescription] = useState('');
 
-  function myFormat(num: number | null) {
-    return '$' + num;
-  }
+  const [addExpense, { loading }] = useMutation(ADD_EXPENSE, {
+    variables: {
+      name: description,
+      amount: amount,
+      type: transactionType?.value,
+    },
+    onCompleted: () => {
+      toggleModal(false);
+      refetch();
+    },
+  });
 
   return (
     <div
@@ -58,14 +80,17 @@ export const AddExpense = () => {
           <div style={{ marginBottom: '15px' }}>
             <Select
               options={options}
-              value={defaultOption}
+              value={transactionType}
               placeholder="Transaction Type"
+              maxMenuHeight={105}
+              onChange={(e) => setType(e)}
             />
           </div>
           <div style={{ marginBottom: '15px' }}>
             <input
               className="transaction-description"
               placeholder="Transaction Description"
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div
@@ -73,12 +98,24 @@ export const AddExpense = () => {
               marginBottom: '15px',
               display: 'flex',
               justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            <NumericInput className="form-control" format={myFormat} />
+            <div style={{ marginRight: '4px' }}>$</div>
+            <NumericInput
+              className="form-control"
+              onChange={(e) => setAmount(e)}
+              value={amount?.toString()}
+            />
           </div>
           <div style={{ textAlign: 'center' }}>
-            <button style={{ width: '30%', padding: '5px' }}>Add</button>
+            <button
+              style={{ width: '30%', padding: '5px' }}
+              onClick={() => addExpense()}
+              disabled={loading}
+            >
+              Add
+            </button>
           </div>
         </div>
       </Modal>
