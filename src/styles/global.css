@@ -32,3 +32,23 @@
 .border-bottom {
   border-bottom: 1px solid black;
 }
+
+.form-control {
+  width: -moz-available; /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+  height: 30px;
+}
+
+.react-numeric-input {
+  width: 50%;
+}
+
+.transaction-description {
+  width: -moz-available; /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+  height: 30px;
+  font-size: 14px;
+  padding: 0px 8px;
+}
