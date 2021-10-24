@@ -11,3 +11,11 @@ export const ADD_EXPENSE = gql`
     }
   }
 `;
+
+export const DELETE_EXPENSE = gql`
+  mutation deleteExpense($id: Int!) {
+    delete_expenses(where: { id: { _eq: $id } }) {
+      affected_rows
+    }
+  }
+`;

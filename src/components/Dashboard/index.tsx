@@ -25,7 +25,7 @@ const Dashboard = () => {
   return (
     <div className="Dashboard">
       <Summary expenses={expenseData.expenses} />
-      <Expenses expenses={expenseData.expenses} />
+      <Expenses expenses={expenseData.expenses} refetch={refetch} />
       <AddExpense refetch={refetch} />
     </div>
   );

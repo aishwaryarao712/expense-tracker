@@ -22,8 +22,8 @@ const customStyles = {
 };
 
 const options = [
-  { value: 'debit', label: 'Debit' },
-  { value: 'credit', label: 'Credit' },
+  { value: 'debit', label: 'Expense' },
+  { value: 'credit', label: 'Income' },
 ];
 const defaultOption = options[0];
 
@@ -38,6 +38,12 @@ export const AddExpense: React.FC<Props> = ({ refetch }) => {
   const [amount, setAmount] = useState<number | null>(null);
   const [description, setDescription] = useState('');
 
+  const resetForm = () => {
+    setAmount(null);
+    setDescription('');
+    setType(defaultOption);
+  };
+
   const [addExpense, { loading }] = useMutation(ADD_EXPENSE, {
     variables: {
       name: description,
@@ -47,6 +53,7 @@ export const AddExpense: React.FC<Props> = ({ refetch }) => {
     onCompleted: () => {
       toggleModal(false);
       refetch();
+      resetForm();
     },
   });
 
@@ -78,6 +85,7 @@ export const AddExpense: React.FC<Props> = ({ refetch }) => {
         shouldCloseOnOverlayClick={true}
         onRequestClose={() => {
           toggleModal(false);
+          resetForm();
         }}
       >
         <div>
